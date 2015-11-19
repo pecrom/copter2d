@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
@@ -13,6 +14,10 @@ import com.copter.Copter2D;
 
 
 public class Obstacle implements WorldAsset {
+private static final String LOGGER_TAG = "Obstacle";
+  
+  private static final Logger LOGGER = new Logger(LOGGER_TAG, Logger.INFO);
+  
   private static final float OBSTACLE_DENSITY = 1000f;
   private static final float OBSTACLE_FRICTION = 0.8f;
   
@@ -29,11 +34,13 @@ public class Obstacle implements WorldAsset {
   private static final float INITIAL_POSITION_X = -50f;
   private static final float INITIAL_POSITION_Y = -50f;
   
+  private static final float ROTATE_ANGLE = 180;
+  
   private Body bodyObstacle;
   private Orientation obstacleOrientation;
   
   public Obstacle() {
-    obstacleOrientation = Orientation.DOWN;
+    obstacleOrientation = Orientation.UP;
   }
   
   @Override
@@ -55,7 +62,7 @@ public class Obstacle implements WorldAsset {
     bodyObstacle = world.createBody(bodyDefObstacle);
     
     Shape shapeObstacle = Obstacle.createShape();    
-    
+   
     FixtureDef fixtureDefObstacle = new FixtureDef();
     fixtureDefObstacle.density = OBSTACLE_DENSITY;
     fixtureDefObstacle.friction = OBSTACLE_FRICTION;
@@ -89,10 +96,12 @@ public class Obstacle implements WorldAsset {
     return obstacleOrientation;
   }
 
-  public void setObstacleOrientation(Orientation obstacleOrientation) {
-    //@TODO update this code to reflect the orientation during painting
-    this.obstacleOrientation = obstacleOrientation;
-    
+  public void setObstacleOrientation(Orientation newObstacleOrientation) { //@TODO fix the rotation, it does not work:-/
+    if (obstacleOrientation != newObstacleOrientation) {
+      LOGGER.info("rotating");
+      bodyObstacle.setTransform(bodyObstacle.getPosition(), (float)Math.toRadians(ROTATE_ANGLE));
+      this.obstacleOrientation = newObstacleOrientation;
+    }    
   }
 
 
@@ -100,5 +109,20 @@ public class Obstacle implements WorldAsset {
   public enum Orientation {
     UP,
     DOWN;
+    
+    public String toString() {
+      String orientationText = "";
+      
+      switch (this) {
+        case DOWN:
+          orientationText = "down";
+          break;
+        case UP:
+          orientationText = "up";
+          break;
+      }
+      return orientationText;
+      
+    }
   }
 }

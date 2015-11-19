@@ -9,7 +9,9 @@ import com.badlogic.gdx.utils.Logger;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
 import com.copter.game.assets.Obstacle;
+import com.copter.game.assets.Obstacle.Orientation;
 import com.copter.game.assets.Updatable;
+import com.copter.utils.Utils;
 
 public class ObstacleManager implements Updatable {
   private static final String LOGGER_TAG = "ObstacleManager";
@@ -22,7 +24,6 @@ public class ObstacleManager implements Updatable {
   
   private static final float MAXIMAL_DISTANCE_BETWEEN_OBSTACLES = Copter2D.WIDTH / Copter2D.SCALE;
   
-  private static final int POSITIVE_RESULT_FROM_RAND = 1; //if the resulted number from Math.random() is this, then it means true  
   
   private Queue<Obstacle> availableObstacles;
   private Queue<Obstacle> usedObstacles;
@@ -82,7 +83,7 @@ public class ObstacleManager implements Updatable {
     }
     
     if ( insertObstacle() ) {
-      prepareObstacle();
+      prepareObstacle(Utils.getRandomTrue());
     }
         
   }
@@ -92,7 +93,7 @@ public class ObstacleManager implements Updatable {
    
     if (!availableObstacles.isEmpty()) { //we still have some spare obstacles which can be inserted 
       if ((lastDistanceObstacle - airplane.getBody().getPosition().x) > 0) { //there is possibility that the obstacle wont be inserted
-        insert = ObstacleManager.getRandomTrue();
+        insert = Utils.getRandomTrue();
         
       } else {    // the obstacle is inserted for sure
         insert = true;
@@ -102,13 +103,14 @@ public class ObstacleManager implements Updatable {
     return insert;
   }
   
-  private static boolean getRandomTrue() {
-    return Math.round(Math.random()) == POSITIVE_RESULT_FROM_RAND ? true : false;
-  }
   
-  private void prepareObstacle() { //@TODO add parameter to set the orientation of the obstacle
+  private void prepareObstacle(boolean topDown) {
     LOGGER.info("Obstacle at: " + airplane.getDistance());
+    
     Obstacle popedObstacle = availableObstacles.poll();
+    Orientation obstacleOrientation = topDown ? Orientation.DOWN : Orientation.UP;
+    LOGGER.info("Obstacle orientation: " + obstacleOrientation);
+    popedObstacle.setObstacleOrientation(obstacleOrientation);
     Vector2 obstaclePosition = new Vector2(airplane.getDistance() + MAXIMAL_DISTANCE_BETWEEN_OBSTACLES , 0);
     popedObstacle.getBody().setTransform(obstaclePosition, 0);
     lastDistanceObstacle = obstaclePosition.x;
