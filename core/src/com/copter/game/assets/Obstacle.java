@@ -110,17 +110,16 @@ private static final String LOGGER_TAG = "Obstacle";
     UP,
     DOWN;
     
+    @Override
     public String toString() {
-      String orientationText = "";
+      String orientationText;
       
-      switch (this) {
-        case DOWN:
-          orientationText = "down";
-          break;
-        case UP:
-          orientationText = "up";
-          break;
+      if (this == DOWN) {
+        orientationText = "down";
+      } else {
+        orientationText = "up";
       }
+    
       return orientationText;
       
     }
