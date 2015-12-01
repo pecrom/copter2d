@@ -44,7 +44,7 @@ public final class Airplane implements WorldAsset, Updatable {
   
   private static final float HORIZONTAL_VELOCITY_GROWTH = 0.1f;
   
-  private float horizontalVelocity = 0.5f;
+  private float horizontalVelocity = 0.2f;
   
   private float verticalVelocity = 0f;
   

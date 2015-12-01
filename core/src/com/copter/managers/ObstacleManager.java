@@ -3,7 +3,6 @@ package com.copter.managers;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
 import com.copter.Copter2D;
@@ -20,9 +19,13 @@ public class ObstacleManager implements Updatable {
  
   private static ObstacleManager instance = null;
   
-  private static final float INCREASE_OBSTACLE_COUNT_EVERY = 10f; //meters 
+  private static final float INCREASE_OBSTACLE_COUNT_EVERY = 20f; //meters 
   
   private static final float MAXIMAL_DISTANCE_BETWEEN_OBSTACLES = Copter2D.WIDTH / Copter2D.SCALE;
+  
+  private static final float MINIMAL_DISTANCE_BETWEEN_OBSTACLES = Obstacle.OBSTACLE_WIDTH;
+  
+  private static final int MAXIMAL_OBSTACLES_COUNT = 5;
   
   
   private Queue<Obstacle> availableObstacles;
@@ -63,9 +66,10 @@ public class ObstacleManager implements Updatable {
   
   private boolean increaseObstacleCount() {
     boolean increase = false;
+    
     int numberOfObstacles = (int) ((int) airplane.getDistance() / INCREASE_OBSTACLE_COUNT_EVERY);
     
-    if (numberOfObstacles > (availableObstacles.size() + usedObstacles.size())) {
+    if (numberOfObstacles > (availableObstacles.size() + usedObstacles.size()) && numberOfObstacles < MAXIMAL_OBSTACLES_COUNT) {
       increase = true;
       LOGGER.info("obstacles count: "+numberOfObstacles);
     }
@@ -91,10 +95,11 @@ public class ObstacleManager implements Updatable {
   private boolean insertObstacle() {
     boolean insert = false;
    
-    if (!availableObstacles.isEmpty()) { //we still have some spare obstacles which can be inserted 
+    if (!availableObstacles.isEmpty()) { //we still have some spare obstacles which can be inserted
+      LOGGER.info("lastDistanceObstacle: " + lastDistanceObstacle + ", airplane position: " + airplane.getBody().getPosition().x);
       if ((lastDistanceObstacle - airplane.getBody().getPosition().x) > 0) { //there is possibility that the obstacle wont be inserted
         insert = Utils.getRandomTrue();
-        
+        LOGGER.info("insert: " + insert);
       } else {    // the obstacle is inserted for sure
         insert = true;
       }
@@ -111,9 +116,11 @@ public class ObstacleManager implements Updatable {
     Orientation obstacleOrientation = topDown ? Orientation.DOWN : Orientation.UP;
     LOGGER.info("Obstacle orientation: " + obstacleOrientation);
     popedObstacle.setObstacleOrientation(obstacleOrientation);
-    Vector2 obstaclePosition = new Vector2(airplane.getDistance() + MAXIMAL_DISTANCE_BETWEEN_OBSTACLES , 0);
-    popedObstacle.getBody().setTransform(obstaclePosition, 0);
-    lastDistanceObstacle = obstaclePosition.x;
+    
+    float horizontalPosition = airplane.getDistance() + MAXIMAL_DISTANCE_BETWEEN_OBSTACLES;
+    popedObstacle.setHorizontalPosition(horizontalPosition);
+    lastDistanceObstacle = horizontalPosition;
+    
     
     try {
       usedObstacles.add(popedObstacle);
@@ -126,7 +133,7 @@ public class ObstacleManager implements Updatable {
   }
   
   private void recycleUsedObstacles() {
-    float nonVisibleXposition = airplane.getBody().getPosition().x - airplane.planeLeftMargin();
+    float nonVisibleXposition = airplane.getBody().getPosition().x - airplane.planeLeftMargin() - Obstacle.OBSTACLE_WIDTH;
     while (usedObstacles.peek() != null && usedObstacles.peek().getBody().getPosition().x < nonVisibleXposition) {
       availableObstacles.add(usedObstacles.poll());
       LOGGER.info("Obstacle was recycled");
