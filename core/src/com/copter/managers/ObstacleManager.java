@@ -95,9 +95,9 @@ public class ObstacleManager implements Updatable {
   private boolean insertObstacle() {
     boolean insert = false;
    
-    if (!availableObstacles.isEmpty()) { //we still have some spare obstacles which can be inserted
+    if (!availableObstacles.isEmpty() && isEnoughDistance()) { //we still have some spare obstacles which can be inserted
       LOGGER.info("lastDistanceObstacle: " + lastDistanceObstacle + ", airplane position: " + airplane.getBody().getPosition().x);
-      if ((lastDistanceObstacle - airplane.getBody().getPosition().x) > 0) { //there is possibility that the obstacle wont be inserted
+      if ((lastDistanceObstacle - airplane.getDistance()) > 0) { //there is possibility that the obstacle wont be inserted
         insert = Utils.getRandomTrue();
         LOGGER.info("insert: " + insert);
       } else {    // the obstacle is inserted for sure
@@ -108,6 +108,17 @@ public class ObstacleManager implements Updatable {
     return insert;
   }
   
+  private boolean isEnoughDistance() {
+    boolean isEnoughDistance = false;
+    int numberOfObstacles = availableObstacles.size() + usedObstacles.size();
+    float averageDistance = (Copter2D.WIDTH / Copter2D.SCALE) / numberOfObstacles;
+    float nextInsertedDistance = (airplane.getDistance() + MAXIMAL_DISTANCE_BETWEEN_OBSTACLES) - lastDistanceObstacle; //distance of the next inserted from the previously inserted
+    if (nextInsertedDistance > averageDistance) {
+      isEnoughDistance = true;
+    }
+    
+    return isEnoughDistance;
+  }
   
   private void prepareObstacle(boolean topDown) {
     LOGGER.info("Obstacle at: " + airplane.getDistance());

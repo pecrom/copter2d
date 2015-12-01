@@ -128,7 +128,7 @@ private static final String LOGGER_TAG = "Obstacle";
    * Sets the horizontal position of the obstacle.
    * @param newX float new x position.
    */
-  public void setHorizontalPosition(float newX) { //@TODO fix the position, it does not work properly, when the obstacle is oriented DOWN:-/
+  public void setHorizontalPosition(float newX) { 
     Vector2 newPositon = bodyObstacle.getPosition();
     newPositon.x = obstacleOrientation == Orientation.DOWN ? newX + (Obstacle.OBSTACLE_WIDTH)  : newX;
     bodyObstacle.setTransform(newPositon, bodyObstacle.getAngle());
