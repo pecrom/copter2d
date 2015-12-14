@@ -11,6 +11,8 @@ public class Copter2D extends Game {
   public static final float WIDTH  = 800;
   public static final float HEIGHT = 480;
   public static final float SCALE  = 100;
+  public static final float GAME_WIDTH = WIDTH / SCALE;
+  public static final float GAME_HEIGHT = HEIGHT / SCALE;
 
   private Camera            cam;
   private Viewport          viewport;

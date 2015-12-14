@@ -23,14 +23,12 @@ public class ObstacleManager implements Updatable {
   
   private static final float MAXIMAL_DISTANCE_BETWEEN_OBSTACLES = Copter2D.WIDTH / Copter2D.SCALE;
   
-  private static final float MINIMAL_DISTANCE_BETWEEN_OBSTACLES = Obstacle.OBSTACLE_WIDTH;
-  
   private static final int MAXIMAL_OBSTACLES_COUNT = 5;
   
   
   private Queue<Obstacle> availableObstacles;
   private Queue<Obstacle> usedObstacles;
-  
+   
   private World gameWorld;
   private Airplane airplane;
   private float lastDistanceObstacle = 0; //last flow plane distance when the obstacle was inserted 
@@ -55,8 +53,7 @@ public class ObstacleManager implements Updatable {
     }
     return instance;
   }
-  
-  
+   
   private void createObstacle() {
     Obstacle obstacle = new Obstacle();
     obstacle.init(gameWorld);
@@ -144,7 +141,7 @@ public class ObstacleManager implements Updatable {
   }
   
   private void recycleUsedObstacles() {
-    float nonVisibleXposition = airplane.getBody().getPosition().x - airplane.planeLeftMargin() - Obstacle.OBSTACLE_WIDTH;
+    float nonVisibleXposition = airplane.getBody().getPosition().x - Airplane.PLANE_LEFT_MARGIN - Obstacle.OBSTACLE_WIDTH;
     while (usedObstacles.peek() != null && usedObstacles.peek().getBody().getPosition().x < nonVisibleXposition) {
       availableObstacles.add(usedObstacles.poll());
       LOGGER.info("Obstacle was recycled");

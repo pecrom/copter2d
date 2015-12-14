@@ -13,7 +13,7 @@ import com.copter.Copter2D;
 
 
 
-public final class Airplane implements WorldAsset, Updatable {  
+public final class Airplane implements WorldAsset, Updatable {    
   /**
    * The plane is placed 1/8 of the screen width from the left side.
    */
@@ -37,6 +37,8 @@ public final class Airplane implements WorldAsset, Updatable {
   
   private static final float PLANE_FRICTION = 0;
   
+  public static final float PLANE_LEFT_MARGIN = Copter2D.WIDTH / Copter2D.SCALE / DIVISOR_FOR_X_START;
+  
   /**
    * How often to update the linear velocity.
    */
@@ -53,7 +55,7 @@ public final class Airplane implements WorldAsset, Updatable {
   private Body planeBody = null;
   private Vector2 velocity = new Vector2(horizontalVelocity, verticalVelocity);
   private float nextVelocityUpdate = UPDATE_VELOCITY_EVERY;
-  private float distance = 0f;
+  private float distance = PLANE_LEFT_MARGIN;
       
   private Airplane() {
     type = GameWorldType.HERO;  
@@ -132,18 +134,12 @@ public final class Airplane implements WorldAsset, Updatable {
   }
     
   private Vector2 getStartingPosition() {
-    float x = planeLeftMargin();
+    float x = PLANE_LEFT_MARGIN;
     float y = Copter2D.HEIGHT / Copter2D.SCALE / DIVISOR_FOR_FINDING_CENTER;
     return new Vector2(x, y);
   }
 
-  /**
-   * How far from left border the plane is placed.
-   * @return left margin of the plane.
-   */
-  public float planeLeftMargin() {
-    return Copter2D.WIDTH / Copter2D.SCALE / DIVISOR_FOR_X_START;
-  }
+  
   
   @Override
   public Body getBody() {    

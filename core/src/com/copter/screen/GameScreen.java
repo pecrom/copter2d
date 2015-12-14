@@ -21,10 +21,12 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
+import com.copter.game.assets.GameBorder;
+import com.copter.managers.BorderManager;
 import com.copter.managers.ObstacleManager;
 
 public class GameScreen extends ScreenAdapter implements InputProcessor, ContactFilter {
-  private static final float   GRAVITY                    = -0.3f;
+  private static final float   GRAVITY                    = 0f; //TODO change back to -0.3f
   private static final float   HORIZONTAL_FORCE           = 0.0F;
   private static final boolean DO_DEBUG                   = true;
   private static final float   MAX_FORCE                  = 1.5f;
@@ -38,6 +40,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
 
   private Airplane plane;
   private ObstacleManager obstacles;
+  private BorderManager borders;
+  
 
   public GameScreen() {
     fpsLogger = new FPSLogger();
@@ -57,7 +61,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     plane.init(gameWorld);
     
     obstacles = ObstacleManager.getInstance(gameWorld, plane);
-    
+    borders = BorderManager.getInstance(gameWorld);
+   
     initObstacle();
     initBonus();
   }
@@ -144,6 +149,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     gameWorld.step(delta, 8, 3);
     plane.update(delta);
     obstacles.update(delta);
+    borders.update(delta);
   }
 
   private static void updateGraphics() {
