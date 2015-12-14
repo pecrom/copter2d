@@ -12,7 +12,6 @@ import com.copter.Copter2D;
 import com.copter.utils.BodyEditorLoader;
 
 public class GameBorder implements Updatable, WorldAsset, Cloneable {
-  private static final float HEIGHT = 1;
   private static final float DENSITY = 100f;
   private static final float FRICTION = 1f;
   private Body body;
