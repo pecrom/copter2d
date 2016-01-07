@@ -133,7 +133,7 @@ public final class Airplane implements WorldAsset, Updatable {
     return new Vector2(hx, hy);
   }
     
-  private Vector2 getStartingPosition() {
+  private static Vector2 getStartingPosition() {
     float x = PLANE_LEFT_MARGIN;
     float y = Copter2D.HEIGHT / Copter2D.SCALE / DIVISOR_FOR_FINDING_CENTER;
     return new Vector2(x, y);
