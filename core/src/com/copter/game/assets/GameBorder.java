@@ -11,7 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.utils.BodyEditorLoader;
 
-public class GameBorder implements Updatable, WorldAsset, Cloneable {
+public class GameBorder implements Updatable, WorldAsset {
   private static final float DENSITY = 100f;
   private static final float FRICTION = 1f;
   private Body body;
@@ -24,9 +24,18 @@ public class GameBorder implements Updatable, WorldAsset, Cloneable {
     this.fixtureName = fixtureName;
   }
 
+  public GameBorder(GameBorder border) {
+    this.body = border.body;
+    this.fixtureData = border.fixtureData;
+    this.fixtureName = border.fixtureName;
+    this.world = border.world;
+    init(world);
+        
+  }
+  
   @Override
   public void update(float delta) {
-   
+    throw new UnsupportedOperationException("Unsupported method update in GameBorder");
   }
 
   @Override
@@ -65,15 +74,6 @@ public class GameBorder implements Updatable, WorldAsset, Cloneable {
   public Body getBody() {
     return body;
   }
-
-  @Override
-  public Object clone() throws CloneNotSupportedException {
-    GameBorder border = (GameBorder) super.clone();
-    border.init(world);
-    return border;
-  }
-
-  
-  
+ 
  
 }
