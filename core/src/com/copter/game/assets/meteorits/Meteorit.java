@@ -67,7 +67,7 @@ public abstract class Meteorit implements WorldAsset, Updatable{
     fixtureDef.density = DENSITY;
     fixtureDef.friction = FRICTION;   
     fixtureDef.isSensor = true;
-    
+    body.setActive(true);
     body.setLinearVelocity(new Vector2(speed, VERTICAL_VELOCITY));
     
     BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));

@@ -21,6 +21,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
+import com.copter.managers.BonusManager;
 import com.copter.managers.BorderManager;
 import com.copter.managers.MeteoritManager;
 import com.copter.managers.ObstacleManager;
@@ -42,6 +43,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
   private ObstacleManager obstacles;
   private BorderManager borders;
   private MeteoritManager meteorits;
+  private BonusManager bonuses;
   
 
   public GameScreen() {
@@ -64,6 +66,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     obstacles = ObstacleManager.getInstance(gameWorld, plane);
     borders = BorderManager.getInstance(gameWorld);
     meteorits = MeteoritManager.getInstance(gameWorld);
+    bonuses = BonusManager.getInstance(gameWorld, plane);
    
     initObstacle();
     initBonus();
@@ -153,6 +156,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     obstacles.update(delta);
     borders.update(delta);
     meteorits.update(delta);
+    bonuses.update(delta);
   }
 
   private static void updateGraphics() {

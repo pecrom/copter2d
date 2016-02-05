@@ -59,11 +59,9 @@ public class MeteoritManager implements Updatable{
     
     if (shownMeteorit == null) {
       timeSinceLastDisappear += delta;
-      LOGGER.info("timeSinceLastDisappear: " + timeSinceLastDisappear);
       if (timeSinceLastDisappear > MIN_DELAY_INTERVAL && Utils.getRandomTrue()) {
         shownMeteorit = chooseMeteorit();
         Vector2 coordinates = getXYCoordinate(shownMeteorit);
-        LOGGER.info("Show at: " + coordinates);
         shownMeteorit.prepareForShow(coordinates);
         
       }
@@ -88,7 +86,6 @@ public class MeteoritManager implements Updatable{
   
   private Meteorit chooseMeteorit() {    
     int index = (int) (Math.random() * meteorits.size());
-    LOGGER.info("index: " + index);
     return meteorits.get(index);
   }
 }
