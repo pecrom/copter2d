@@ -74,6 +74,11 @@ public class GameBorder implements Updatable, WorldAsset {
   public Body getBody() {
     return body;
   }
+
+  @Override
+  public float getWidth() {
+    return Copter2D.GAME_WIDTH;
+  }
  
  
 }

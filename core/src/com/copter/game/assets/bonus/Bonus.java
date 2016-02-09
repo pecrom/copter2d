@@ -19,6 +19,8 @@ public abstract class Bonus implements WorldAsset{
   private static final float INIT_Y = -10;
   private static final float SCALE = 0.3f;
   private static final float NO_ROTATION = 0;
+  private static final float HORIZONTAL_VELOCITY = -1f;
+  private static final float VERTICAL_VELOCITY = 0f;
   
   protected World world;
   protected Body body;
@@ -51,6 +53,7 @@ public abstract class Bonus implements WorldAsset{
     bonusBodyDef.type = BodyType.KinematicBody;
     
     body = world.createBody(bonusBodyDef);
+    body.setLinearVelocity(HORIZONTAL_VELOCITY, VERTICAL_VELOCITY);
     
     FixtureDef bonusFixtureDef = new FixtureDef();
     bonusFixtureDef.density = DENSITY; 
@@ -70,4 +73,12 @@ public abstract class Bonus implements WorldAsset{
   }
   
   public abstract void influencePlane();
+
+
+  @Override
+  public float getWidth() {
+    return SCALE;
+  }
+  
+  
 }

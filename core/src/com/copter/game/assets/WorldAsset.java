@@ -31,4 +31,10 @@ public interface WorldAsset {
    * @return Body element
    */
   Body getBody();
+  
+  /**
+   * Gets assets width
+   * @return float width
+   */
+  float getWidth();
 }

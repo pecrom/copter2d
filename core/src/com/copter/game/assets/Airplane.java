@@ -149,4 +149,9 @@ public final class Airplane implements WorldAsset, Updatable {
   public float getDistance() {
     return distance;
   }
+
+  @Override
+  public float getWidth() {
+    return Copter2D.WIDTH / Copter2D.SCALE * PLANE_WIDTH_RATE;
+  }
 }

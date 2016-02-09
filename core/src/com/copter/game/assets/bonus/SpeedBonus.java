@@ -14,4 +14,6 @@ public class SpeedBonus extends Bonus{
     
   }
 
+  
+
 }

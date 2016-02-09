@@ -154,4 +154,9 @@ private static final String LOGGER_TAG = "Obstacle";
       
     }
   }
+
+  @Override
+  public float getWidth() {
+    return OBSTACLE_WIDTH;
+  }
 }
