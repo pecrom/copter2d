@@ -16,7 +16,7 @@ public final class Utils {
   }
   
   /**
-   * Randomly returns true or false
+   * Randomly returns true or false.
    * @return true / false
    */
   public static boolean getRandomTrue() {
@@ -24,9 +24,9 @@ public final class Utils {
   }
   
   /**
-   * Check if asset is still in viewable area
-   * @param plane 
-   * @param asset
+   * Check if asset is still in viewable area.
+   * @param plane instance of Airplane class
+   * @param asset instance of WorldAsset class
    * @return true / false
    */
   public static boolean isInViewableArea(Airplane plane, WorldAsset asset) {
@@ -36,13 +36,13 @@ public final class Utils {
   }
   
   /**
-   * Returns random number from <0-numberOfValues>
-   * @param numberOfValues 
-   * @return int
+   * Returns random number from <0-numberOfValues>.
+   * @param numberOfValues high limit of the random number 
+   * @return random number
    */
   public static int getRandomValue(int numberOfValues) {
     int randomNum = (int) Math.round(Math.random() * MAKE_INTEGER);
-     return (int)(randomNum * (numberOfValues / (float)MAKE_INTEGER));
+    return (int)(randomNum * (numberOfValues / (float)MAKE_INTEGER));
   }
   
 }

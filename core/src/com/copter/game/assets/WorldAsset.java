@@ -27,13 +27,13 @@ public interface WorldAsset {
   void init(World world);
   
   /**
-   * Gets world body
+   * Gets world body.
    * @return Body element
    */
   Body getBody();
   
   /**
-   * Gets assets width
+   * Gets assets width.
    * @return float width
    */
   float getWidth();

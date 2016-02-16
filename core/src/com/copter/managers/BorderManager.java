@@ -52,6 +52,11 @@ public class BorderManager implements Updatable {
 
   }
 
+  /**
+   * Returns instance of BorderManager.
+   * @param world instance of World class
+   * @return instance of BorderManager
+   */
   public static BorderManager getInstance(World world) {
     if (instance == null) {
       instance = new BorderManager(world);

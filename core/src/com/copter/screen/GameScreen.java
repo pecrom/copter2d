@@ -194,10 +194,12 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     float forceToApply = Math.abs(forceSize.y / maxDistanceForce * MAX_FORCE);
 
     
-    if (boxCenterPosition.y < touchPosition.y)
+    if (boxCenterPosition.y < touchPosition.y) {
       boxBody.applyLinearImpulse(new Vector2(0, -forceToApply), boxBody.getPosition(), true);
-    else
+    } else {
       boxBody.applyLinearImpulse(new Vector2(0, forceToApply), boxBody.getPosition(), true);
+    }
+      
     return true;
   }
 

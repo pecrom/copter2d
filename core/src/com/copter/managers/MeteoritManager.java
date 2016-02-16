@@ -61,7 +61,7 @@ public class MeteoritManager implements Updatable{
       timeSinceLastDisappear += delta;
       if (timeSinceLastDisappear > MIN_DELAY_INTERVAL && Utils.getRandomTrue()) {
         shownMeteorit = chooseMeteorit();
-        Vector2 coordinates = getXYCoordinate(shownMeteorit);
+        Vector2 coordinates = getPositionCoordinates(shownMeteorit);
         shownMeteorit.prepareForShow(coordinates);
         
       }
@@ -76,7 +76,7 @@ public class MeteoritManager implements Updatable{
     }    
   }
   
-  private static Vector2 getXYCoordinate(Meteorit meteoritToShow) {
+  private static Vector2 getPositionCoordinates(Meteorit meteoritToShow) {
     float yCoordinate = (float) (Math.random() * Copter2D.GAME_HEIGHT);
     yCoordinate = (yCoordinate + meteoritToShow.getHeight()) > Copter2D.GAME_HEIGHT ? (yCoordinate - meteoritToShow.getHeight()) : yCoordinate;
     float xCoordinate = Airplane.getInstance().getDistance() + Copter2D.GAME_WIDTH;

@@ -49,6 +49,12 @@ public class BonusManager implements Updatable {
     }
   }
 
+  /**
+   * Returns instance of BonusManager.
+   * @param world instance of World class
+   * @param plane instance of Airplane class
+   * @return instance of BonusManager
+   */
   public static BonusManager getInstance(World world, Airplane plane) {
     if (instance == null) {
       instance = new BonusManager(world, plane);
@@ -74,7 +80,7 @@ public class BonusManager implements Updatable {
       } else {        
         showIn -= delta;        
       }
-    } else if (!Utils.isInViewableArea(plane, shownBonus)){ //if the bonus is out of viewable area then deactivate it
+    } else if (!Utils.isInViewableArea(plane, shownBonus)) { //if the bonus is out of viewable area then deactivate it
       LOGGER.info("Bonus");
       shownBonus.getBody().setActive(false);
       shownBonus = null;

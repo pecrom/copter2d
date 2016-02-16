@@ -10,6 +10,10 @@ public class BigMeteorit extends Meteorit {
   private static final float SPEED_OF_ROTATION = 1.8f;
   private static final float BIG_SPEED = -1.3f;
   
+  
+  /**
+   * Constructs BigMeteorit.
+   */
   public BigMeteorit() {
     super(BIG_FIXTURE_DATA, BIG_FIXTURE_NAME, BIG_SPEED);
     width = 43f / Copter2D.SCALE; //width of the image

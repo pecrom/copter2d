@@ -14,7 +14,7 @@ import com.copter.Copter2D;
 
 
 public class Obstacle implements WorldAsset {
-private static final String LOGGER_TAG = "Obstacle";
+  private static final String LOGGER_TAG = "Obstacle";
   
   private static final Logger LOGGER = new Logger(LOGGER_TAG, Logger.INFO);
   
@@ -135,6 +135,7 @@ private static final String LOGGER_TAG = "Obstacle";
   }
 
   /**
+   * Orientation of the obstacle.
    */
   public enum Orientation {
     UP,
