@@ -20,8 +20,8 @@ public class BonusManager implements Updatable {
   private static final Logger LOGGER            = new Logger(LOGGER_TAG, Logger.INFO);
   
   private static BonusManager instance          = null;
-  private static int          HOW_OFTEN_TO_SHOW = 5;
-  private static float        NOT_SCHEDULED     = 0;
+  private static final int          HOW_OFTEN_TO_SHOW = 5;
+  private static final float        NOT_SCHEDULED     = 0;
 
   private World               world;
   private Airplane            plane;
@@ -63,7 +63,7 @@ public class BonusManager implements Updatable {
     return instance;
   }
 
-  private float schedule() {
+  private static float schedule() {
     return (float) (Math.random() * HOW_OFTEN_TO_SHOW);
   }
 

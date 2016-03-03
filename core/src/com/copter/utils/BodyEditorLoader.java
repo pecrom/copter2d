@@ -81,7 +81,7 @@ public class BodyEditorLoader {
    * @param scale
    *          The desired scale of the body. The default width is 1.
    */
-  public void attachFixture(Body body, String name, FixtureDef fd, float scale) {
+  public void attachFixture(Body body, String name, FixtureDef fd, float scale, Object userData) {
     RigidBodyModel rbModel = model.rigidBodies.get(name);
     if (rbModel == null)
       throw new NullPointerException(NAME_WAS_NOT_FOUND + name);
@@ -99,7 +99,7 @@ public class BodyEditorLoader {
 
       polygonShape.set(vertices);
       fd.shape = polygonShape;
-      body.createFixture(fd);
+      body.createFixture(fd).setUserData(userData);
 
       for (int ii = 0, nn = vertices.length; ii < nn; ii++) {
         free(vertices[ii]);
@@ -114,7 +114,7 @@ public class BodyEditorLoader {
       circleShape.setPosition(center);
       circleShape.setRadius(radius);
       fd.shape = circleShape;
-      body.createFixture(fd);
+      body.createFixture(fd).setUserData(userData);
 
       free(center);
     }

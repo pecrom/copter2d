@@ -72,8 +72,7 @@ public class Obstacle implements WorldAsset {
     fixtureDefObstacle.friction = OBSTACLE_FRICTION;
     fixtureDefObstacle.shape = shapeObstacle;
     
-    bodyObstacle.createFixture(fixtureDefObstacle);
-    bodyObstacle.setUserData(this);
+    bodyObstacle.createFixture(fixtureDefObstacle).setUserData(this);
 
   }
 

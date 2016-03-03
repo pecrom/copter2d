@@ -60,7 +60,8 @@ public abstract class Bonus implements WorldAsset{
     bonusFixtureDef.friction = FRICTION;
     bonusFixtureDef.isSensor = true;
     BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, bonusFixtureDef, SCALE);
+    loader.attachFixture(body, fixtureName, bonusFixtureDef, SCALE, this);
+    
   }
 
   @Override

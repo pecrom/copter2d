@@ -71,7 +71,7 @@ public abstract class Meteorit implements WorldAsset, Updatable{
     body.setLinearVelocity(new Vector2(speed, VERTICAL_VELOCITY));
     
     BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, fixtureDef, width);    
+    loader.attachFixture(body, fixtureName, fixtureDef, width, this);    
     
   //body.createFixture(fixtureDef); //TODO set texture
   }
@@ -87,6 +87,7 @@ public abstract class Meteorit implements WorldAsset, Updatable{
     
   }
   
+  @Override
   public float getWidth() {
     return width;
   }

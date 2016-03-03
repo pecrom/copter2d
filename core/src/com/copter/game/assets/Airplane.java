@@ -121,9 +121,10 @@ public final class Airplane implements WorldAsset, Updatable {
     
     //@TODO set user data to fixture
     Fixture planeFix = planeBody.createFixture(planeFixDef);
+    planeFix.setUserData(this);
+    
     planeBody.setLinearVelocity(velocity);
     
-    planeBody.setUserData(this);
   }
   
   private static Vector2 getHxHy() {

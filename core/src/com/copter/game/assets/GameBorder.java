@@ -64,7 +64,7 @@ public class GameBorder implements Updatable, WorldAsset {
     fixtureDef.friction = FRICTION;   
     
     BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, fixtureDef, Copter2D.GAME_WIDTH);
+    loader.attachFixture(body, fixtureName, fixtureDef, Copter2D.GAME_WIDTH, this);
     
     //body.createFixture(fixtureDef); //TODO set texture
   } 

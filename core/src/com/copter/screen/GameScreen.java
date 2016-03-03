@@ -13,7 +13,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.ContactFilter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -21,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
+import com.copter.game.assets.collisions.CollisionsChecker;
 import com.copter.managers.BonusManager;
 import com.copter.managers.BorderManager;
 import com.copter.managers.MeteoritManager;
@@ -53,10 +53,13 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
       debugRenderer = new Box2DDebugRenderer();
     }
     Gdx.input.setInputProcessor(this);
+    
   }
 
   private void initWorld() {
     gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);
+    gameWorld.setContactFilter(new CollisionsChecker());
+    
     gameCamera = new OrthographicCamera(Copter2D.WIDTH / Copter2D.SCALE, Copter2D.HEIGHT / Copter2D.SCALE);
     gameCamera.position.set(Copter2D.WIDTH / Copter2D.SCALE / 2, Copter2D.HEIGHT / Copter2D.SCALE / 2, 0);
 
@@ -69,31 +72,10 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     bonuses = BonusManager.getInstance(gameWorld, plane);
    
     initObstacle();
-    initBonus();
+   
   }
 
-  private void initBonus() {
-    BodyDef circle = new BodyDef();
-    circle.type = BodyType.KinematicBody;
-    circle.position.set(new Vector2(7f, Copter2D.HEIGHT / Copter2D.SCALE / 2f));
-
-    bonus = gameWorld.createBody(circle);
-
-    CircleShape circleShape = new CircleShape();
-    circleShape.setRadius(1f);
-
-    FixtureDef bonusFix = new FixtureDef();
-    bonusFix.density = 1f;
-    bonusFix.friction = 1f;
-    bonusFix.shape = circleShape;
-
-    bonusFix.isSensor = true;
-
-    bonus.createFixture(bonusFix);
-
-    bonus.setLinearVelocity(-1f, 0);
-
-  }
+ 
 
   private void initObstacle() {
     // TOP
@@ -151,7 +133,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
   }
 
   private void updateWorld(float delta) {
-    gameWorld.step(delta, 8, 3);
+    gameWorld.step(delta, 20, 15);
     plane.update(delta);
     obstacles.update(delta);
     borders.update(delta);
@@ -229,7 +211,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
 
   @Override
   public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-
     return false;
   }
 
