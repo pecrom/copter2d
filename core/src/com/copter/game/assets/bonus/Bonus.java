@@ -26,10 +26,12 @@ public abstract class Bonus implements WorldAsset{
   protected Body body;
   protected String fixtureData;
   protected String fixtureName;
+  protected boolean consumed;
   
   protected Bonus(String fixtureData, String fixtureName) {
     this.fixtureData = fixtureData;
     this.fixtureName = fixtureName;
+    consumed = false;
   }
   
   
@@ -73,9 +75,18 @@ public abstract class Bonus implements WorldAsset{
     body.setTransform(new Vector2(x, y), NO_ROTATION);
   }
   
-  public abstract void influencePlane();
+  public void influencePlane() {
+    consumed = true;
+  }
 
-
+  public void setConsumed(boolean consumed) {
+    this.consumed = consumed;
+  }  
+    
+  public boolean isConsumed() {
+    return consumed;
+  }
+  
   @Override
   public float getWidth() {
     return SCALE;

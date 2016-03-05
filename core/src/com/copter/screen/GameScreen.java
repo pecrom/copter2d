@@ -27,24 +27,25 @@ import com.copter.managers.MeteoritManager;
 import com.copter.managers.ObstacleManager;
 
 public class GameScreen extends ScreenAdapter implements InputProcessor, ContactFilter {
-  private static final float   GRAVITY                    = 0f; //TODO change back to -0.3f
-  private static final float   HORIZONTAL_FORCE           = 0.0F;
-  private static final boolean DO_DEBUG                   = true;
-  private static final float   MAX_FORCE                  = 1.5f;
+  private static final float   GRAVITY          = 0f;             // TODO change
+                                                                  // back to
+                                                                  // -0.3f
+  private static final float   HORIZONTAL_FORCE = 0.0F;
+  private static final boolean DO_DEBUG         = true;
+  private static final float   MAX_FORCE        = 1.5f;
 
-  private World              gameWorld;
-  private Camera             gameCamera;
-  private Box2DDebugRenderer debugRenderer;
-  private Body               boxBody;
-  private Body               obstacleTop, obstacleBottom, bonus;
-  private FPSLogger          fpsLogger;
+  private World                gameWorld;
+  private Camera               gameCamera;
+  private Box2DDebugRenderer   debugRenderer;
+  private Body                 boxBody;
+  private Body                 obstacleTop, obstacleBottom, bonus;
+  private FPSLogger            fpsLogger;
 
-  private Airplane plane;
-  private ObstacleManager obstacles;
-  private BorderManager borders;
-  private MeteoritManager meteorits;
-  private BonusManager bonuses;
-  
+  private Airplane             plane;
+  private ObstacleManager      obstacles;
+  private BorderManager        borders;
+  private MeteoritManager      meteorits;
+  private BonusManager         bonuses;
 
   public GameScreen() {
     fpsLogger = new FPSLogger();
@@ -53,29 +54,29 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
       debugRenderer = new Box2DDebugRenderer();
     }
     Gdx.input.setInputProcessor(this);
-    
+
   }
 
   private void initWorld() {
     gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);
-    gameWorld.setContactFilter(new CollisionsChecker());
-    
+    CollisionsChecker checker = new CollisionsChecker();
+    gameWorld.setContactFilter(checker);
+    gameWorld.setContactListener(checker);
+
     gameCamera = new OrthographicCamera(Copter2D.WIDTH / Copter2D.SCALE, Copter2D.HEIGHT / Copter2D.SCALE);
     gameCamera.position.set(Copter2D.WIDTH / Copter2D.SCALE / 2, Copter2D.HEIGHT / Copter2D.SCALE / 2, 0);
 
     plane = Airplane.getInstance();
     plane.init(gameWorld);
-    
+
     obstacles = ObstacleManager.getInstance(gameWorld, plane);
     borders = BorderManager.getInstance(gameWorld);
     meteorits = MeteoritManager.getInstance(gameWorld);
     bonuses = BonusManager.getInstance(gameWorld, plane);
-   
-    initObstacle();
-   
-  }
 
- 
+    initObstacle();
+
+  }
 
   private void initObstacle() {
     // TOP
@@ -119,11 +120,9 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     updateWorld(delta);
     GameScreen.updateGraphics();
     fpsLogger.log();
- 
 
     gameCamera.position.x = plane.getBody().getPosition().x + 3;
 
-    
     gameCamera.update();
     if (DO_DEBUG) {
       debugRenderer.render(gameWorld, gameCamera.combined);
@@ -133,19 +132,20 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
   }
 
   private void updateWorld(float delta) {
-    gameWorld.step(delta, 20, 15);
+    gameWorld.step(delta, 3, 8);
     plane.update(delta);
     obstacles.update(delta);
     borders.update(delta);
     meteorits.update(delta);
     bonuses.update(delta);
+
   }
 
   private static void updateGraphics() {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
   }
-  
+
   @Override
   public boolean keyDown(int keycode) {
     // TODO Auto-generated method stub
@@ -175,13 +175,12 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     float maxDistanceForce = Copter2D.HEIGHT / Copter2D.SCALE;
     float forceToApply = Math.abs(forceSize.y / maxDistanceForce * MAX_FORCE);
 
-    
     if (boxCenterPosition.y < touchPosition.y) {
       boxBody.applyLinearImpulse(new Vector2(0, -forceToApply), boxBody.getPosition(), true);
     } else {
       boxBody.applyLinearImpulse(new Vector2(0, forceToApply), boxBody.getPosition(), true);
     }
-      
+
     return true;
   }
 

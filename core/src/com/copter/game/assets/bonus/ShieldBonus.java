@@ -10,8 +10,7 @@ public class ShieldBonus extends Bonus{
 
   @Override
   public void influencePlane() {
-    // TODO Auto-generated method stub
-    
+    super.influencePlane();
   }
 
   

@@ -1,24 +1,31 @@
 package com.copter.game.assets.collisions;
 
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactFilter;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Logger;
 import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.WorldAsset;
+import com.copter.game.assets.collisions.colliders.ColliderFactory;
 
-public class CollisionsChecker implements ContactFilter{
+public class CollisionsChecker implements ContactFilter, ContactListener{
   private static final String LOGGER_TAG        = "CollisionsChecker";
 
   private static final Logger LOGGER            = new Logger(LOGGER_TAG, Logger.INFO);
+  
+  CollisionsObject collidedPair;
 
   @Override
   public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+    collidedPair = null;
     WorldAsset first = (WorldAsset) fixtureA.getUserData();
-    WorldAsset second = (WorldAsset) fixtureA.getUserData();
+    WorldAsset second = (WorldAsset) fixtureB.getUserData();
     
-    CollisionsObject collided = splitCollided(first, second);    
-    LOGGER.error("colliding: " + collided.isHeroColliding());
-    return collided.isHeroColliding();
+    collidedPair = splitCollided(first, second);
+    return collidedPair.isHeroColliding();
   }
   
   private CollisionsObject splitCollided(WorldAsset first, WorldAsset second) {
@@ -35,6 +42,33 @@ public class CollisionsChecker implements ContactFilter{
     return collided;
   }
 
+
+  @Override
+  public void beginContact(Contact contact) {
+   if(contact.isTouching()) {
+     ColliderFactory.getCollider(collidedPair.getHero(), collidedPair.getAsset()).collide();
+   }
+  }
+
+  @Override
+  public void endContact(Contact contact) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void preSolve(Contact contact, Manifold oldManifold) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  @Override
+  public void postSolve(Contact contact, ContactImpulse impulse) {
+    // TODO Auto-generated method stub
+    
+  }
+ 
+  
   /**
    * Helper class which holds hero and another world asset.
    * 
@@ -66,5 +100,5 @@ public class CollisionsChecker implements ContactFilter{
     }
     
   }
-  
+ 
 }

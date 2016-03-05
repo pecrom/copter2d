@@ -1,5 +1,6 @@
 package com.copter.managers;
 
+import java.time.chrono.IsoChronology;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,8 @@ public class BonusManager implements Updatable {
   private static BonusManager instance          = null;
   private static final int          HOW_OFTEN_TO_SHOW = 5;
   private static final float        NOT_SCHEDULED     = 0;
+  private static final float    HIDING_X = -1f;
+  private static final float    HIDING_Y = -1f;
 
   private World               world;
   private Airplane            plane;
@@ -40,9 +43,9 @@ public class BonusManager implements Updatable {
 
   private void fillBonuses() {
     bonuses = new ArrayList<Bonus>();
-    bonuses.add(new SpeedBonus());
+    //bonuses.add(new SpeedBonus());
     bonuses.add(new FuelBonus());
-    bonuses.add(new ShieldBonus());
+    //bonuses.add(new ShieldBonus());
 
     for (Bonus initialisingBonus : bonuses) {
       initialisingBonus.init(world);
@@ -80,13 +83,19 @@ public class BonusManager implements Updatable {
       } else {        
         showIn -= delta;        
       }
-    } else if (!Utils.isInViewableArea(plane, shownBonus)) { //if the bonus is out of viewable area then deactivate it
+    } else if (!Utils.isInViewableArea(plane, shownBonus) || shownBonus.isConsumed()) { //if the bonus is out of viewable area then deactivate it
       LOGGER.info("Bonus");
       shownBonus.getBody().setActive(false);
+      hideBonus();
+      shownBonus.setConsumed(false);
       shownBonus = null;
     }
   }
 
+  private void hideBonus() {
+    shownBonus.setPosition(HIDING_X, HIDING_Y);
+  }
+  
   private void setupBonusToShow(Bonus chosenBonus) {
     float xPosition = plane.getDistance() + Copter2D.GAME_WIDTH;
     float yPosition = (float) (Math.random() * Copter2D.GAME_HEIGHT);
