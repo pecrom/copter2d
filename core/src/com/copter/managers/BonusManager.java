@@ -1,6 +1,5 @@
 package com.copter.managers;
 
-import java.time.chrono.IsoChronology;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +42,9 @@ public class BonusManager implements Updatable {
 
   private void fillBonuses() {
     bonuses = new ArrayList<Bonus>();
-    //bonuses.add(new SpeedBonus());
+    bonuses.add(new SpeedBonus());
     bonuses.add(new FuelBonus());
-    //bonuses.add(new ShieldBonus());
+    bonuses.add(new ShieldBonus());
 
     for (Bonus initialisingBonus : bonuses) {
       initialisingBonus.init(world);

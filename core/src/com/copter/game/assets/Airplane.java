@@ -33,7 +33,7 @@ public final class Airplane implements WorldAsset, Updatable {
    */
   private static final float PLANE_WIDTH_RATE = 0.11f;
   
-  private static final float PLANE_DENSITY = 500;
+  private static final float PLANE_DENSITY = 0.5f;
   
   private static final float PLANE_FRICTION = 0;
   

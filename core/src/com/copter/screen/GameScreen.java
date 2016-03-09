@@ -21,18 +21,18 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
 import com.copter.game.assets.collisions.CollisionsChecker;
+import com.copter.game.input.GameInput;
 import com.copter.managers.BonusManager;
 import com.copter.managers.BorderManager;
 import com.copter.managers.MeteoritManager;
 import com.copter.managers.ObstacleManager;
 
-public class GameScreen extends ScreenAdapter implements InputProcessor, ContactFilter {
-  private static final float   GRAVITY          = 0f;             // TODO change
+public class GameScreen extends ScreenAdapter {
+  private static final float   GRAVITY          = -0.3f;             // TODO change
                                                                   // back to
                                                                   // -0.3f
   private static final float   HORIZONTAL_FORCE = 0.0F;
   private static final boolean DO_DEBUG         = true;
-  private static final float   MAX_FORCE        = 1.5f;
 
   private World                gameWorld;
   private Camera               gameCamera;
@@ -53,8 +53,7 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     if (DO_DEBUG) {
       debugRenderer = new Box2DDebugRenderer();
     }
-    Gdx.input.setInputProcessor(this);
-
+    
   }
 
   private void initWorld() {
@@ -75,7 +74,8 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
     bonuses = BonusManager.getInstance(gameWorld, plane);
 
     initObstacle();
-
+    
+    Gdx.input.setInputProcessor(new GameInput(gameWorld, plane, gameCamera));
   }
 
   private void initObstacle() {
@@ -144,73 +144,6 @@ public class GameScreen extends ScreenAdapter implements InputProcessor, Contact
   private static void updateGraphics() {
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-  }
-
-  @Override
-  public boolean keyDown(int keycode) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean keyUp(int keycode) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean keyTyped(char character) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-    Vector2 boxCenterPosition = new Vector2(boxBody.getPosition().x, boxBody.getPosition().y);
-    Vector3 touchPosition = gameCamera.unproject(new Vector3(screenX, screenY, 0));
-    Vector2 distanceVec = new Vector2(boxCenterPosition);
-    Vector2 forceSize = distanceVec.sub(touchPosition.x, touchPosition.y); // fix
-                                                                           // this
-
-    float maxDistanceForce = Copter2D.HEIGHT / Copter2D.SCALE;
-    float forceToApply = Math.abs(forceSize.y / maxDistanceForce * MAX_FORCE);
-
-    if (boxCenterPosition.y < touchPosition.y) {
-      boxBody.applyLinearImpulse(new Vector2(0, -forceToApply), boxBody.getPosition(), true);
-    } else {
-      boxBody.applyLinearImpulse(new Vector2(0, forceToApply), boxBody.getPosition(), true);
-    }
-
-    return true;
-  }
-
-  @Override
-  public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean touchDragged(int screenX, int screenY, int pointer) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean mouseMoved(int screenX, int screenY) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean scrolled(int amount) {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-    return false;
   }
 
 }
