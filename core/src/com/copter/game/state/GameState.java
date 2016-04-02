@@ -5,7 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 
 public abstract class GameState {
   private States state;
-  private ScreenAdapter screen;
+  protected ScreenAdapter screen;
   
   public GameState(States state, ScreenAdapter screen) {
     this.state = state;

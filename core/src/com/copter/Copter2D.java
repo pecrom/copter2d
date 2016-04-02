@@ -22,7 +22,9 @@ public class Copter2D extends Game {
   @Override
   public void create() {
     cam = new OrthographicCamera(WIDTH, HEIGHT);
+    
     viewport = new FitViewport(WIDTH, HEIGHT, cam);
+  
     stateManager = StateManager.getInstance();
     stateManager.setGame(this);
     stateManager.init();

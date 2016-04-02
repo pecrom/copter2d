@@ -17,7 +17,7 @@ public class PlayingState extends GameState {
   @Override
   public void stateEnter(Game game, States previous) {
     if (previous != States.PAUSE) {
-      game.setScreen(new GameScreen());
+      game.setScreen(screen);
     }
   }
 
