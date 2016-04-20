@@ -46,9 +46,19 @@ public final class Airplane implements WorldAsset, Updatable {
   
   private static final float HORIZONTAL_VELOCITY_GROWTH = 0.1f;
   
+  /**
+   * Max % of fuel
+   */
+  private static final float MAX_FUEL = 100f;
+  
   private float horizontalVelocity = 0.2f;
   
   private float verticalVelocity = 0f;
+  
+  /**
+   * % of fuel
+   */
+  private float fuel = 100f;
   
   private static Airplane instance = null;
   private GameWorldType type = null;
@@ -155,4 +165,25 @@ public final class Airplane implements WorldAsset, Updatable {
   public float getWidth() {
     return Copter2D.WIDTH / Copter2D.SCALE * PLANE_WIDTH_RATE;
   }
+
+  /**
+   * Returns % of fuel
+   * @return float % of fuel
+   */
+  public float getFuel() {
+    return fuel;
+  }
+
+  /**
+   * Sets fuel, if the resulted value would be more than MAX_FUEL, then MAX_FUEL is set instead
+   * @param fuel
+   */
+  public void setFuel(float newFuel) {
+    fuel = newFuel;
+    if ( fuel > MAX_FUEL ) {
+      fuel = MAX_FUEL;
+    }
+  }
+  
+  
 }

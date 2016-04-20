@@ -1,6 +1,8 @@
 package com.copter.game.assets.collisions.colliders;
 
 import com.copter.game.assets.WorldAsset;
+import com.copter.game.state.StateManager;
+import com.copter.game.state.States;
 
 public class ObstacleCollider extends Collider {
 
@@ -10,7 +12,7 @@ public class ObstacleCollider extends Collider {
 
   @Override
   public void collide() {    
-    
+    StateManager.getInstance().changeStateTo(States.GAMEOVER);
   }
 
 }

@@ -23,6 +23,7 @@ public class StateManager {
   
   private void initStates() {
     allStates.put(States.PLAYING, new PlayingState());
+    allStates.put(States.GAMEOVER, new GameoverState());
   }
   
   /**
