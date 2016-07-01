@@ -17,8 +17,8 @@ public class FuelBonus extends Bonus{
 
   @Override
   public void influencePlane() {
+    super.influencePlane();
     Airplane plane = Airplane.getInstance();
-    plane.getFuel();
     plane.setFuel(plane.getFuel() + FUEL_INCREASE);
   }
 
