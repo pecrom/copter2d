@@ -5,15 +5,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
+import com.copter.utils.Box2dUtils;
 
 
 
-public final class Airplane implements WorldAsset, Updatable {    
+public final class Airplane implements WorldAsset, Updatable {   
+  private static final String LOGGER_TAG = "Airplane";
+  
+  private static final Logger LOGGER = new Logger(LOGGER_TAG, Logger.INFO);
+  
   /**
    * The plane is placed 1/8 of the screen width from the left side.
    */
@@ -46,12 +52,20 @@ public final class Airplane implements WorldAsset, Updatable {
   
   private static final float HORIZONTAL_VELOCITY_GROWTH = 0.1f;
   
+  private static final float INIT_HORIZONTAL_VELOCITY = 0.2f;
+  
   /**
    * Max % of fuel
    */
   private static final float MAX_FUEL = 100f;
   
-  private float horizontalVelocity = 0.2f;
+  /**
+   * Fuel consumption per meter
+   */
+  private static final float FULE_CONSUMPTION_PER_METER = 15f;
+  
+  
+  private float horizontalVelocity = INIT_HORIZONTAL_VELOCITY;
   
   private float verticalVelocity = 0f;
   
@@ -102,6 +116,8 @@ public final class Airplane implements WorldAsset, Updatable {
     float deltaDistance = velocity.x * delta;
     nextVelocityUpdate -= deltaDistance;
     distance += deltaDistance;    
+    fuel -= deltaDistance * FULE_CONSUMPTION_PER_METER;
+    
     
     if (nextVelocityUpdate < REMAINING_DISTANCE_TO_UPDATE) {
       //update the speed
@@ -113,21 +129,13 @@ public final class Airplane implements WorldAsset, Updatable {
 
   @Override
   public void init(World world) {
-    BodyDef planeBodyDef = new BodyDef();
-    planeBodyDef.type = BodyType.DynamicBody;
-    Vector2 startingPosition = getStartingPosition();    
-    planeBodyDef.position.set(startingPosition);
-    
-    planeBody = world.createBody(planeBodyDef);
+    planeBody = Box2dUtils.createBody(world, BodyType.DynamicBody, getStartingPosition());
         
     PolygonShape planeShape = new PolygonShape();
     Vector2 planeSize = Airplane.getHxHy(); //half of the plane size
     planeShape.setAsBox(planeSize.x, planeSize.y);
     
-    FixtureDef planeFixDef = new FixtureDef();
-    planeFixDef.shape = planeShape;
-    planeFixDef.density = PLANE_DENSITY;
-    planeFixDef.friction = PLANE_FRICTION;
+    FixtureDef planeFixDef = Box2dUtils.createFixtureDef(PLANE_DENSITY, PLANE_FRICTION, planeShape);
     
     //@TODO set user data to fixture
     Fixture planeFix = planeBody.createFixture(planeFixDef);
@@ -183,6 +191,26 @@ public final class Airplane implements WorldAsset, Updatable {
     if ( fuel > MAX_FUEL ) {
       fuel = MAX_FUEL;
     }
+  }
+  
+  
+  /**
+   * Sets new horizontal velocity, if the new velocity is lower than the initial one, then the initial one is used.
+   * @param newHorizontalVelocity
+   */
+  public void setHorizontalVelocity(float newHorizontalVelocity) {
+    if (newHorizontalVelocity < INIT_HORIZONTAL_VELOCITY) {
+      horizontalVelocity = newHorizontalVelocity;
+    }
+    
+  }
+  
+  /**
+   * Returns horizontal velocity.
+   * @return float current horizontal velocity
+   */
+  public float getHorizontalVelocity() {
+    return horizontalVelocity;
   }
   
   

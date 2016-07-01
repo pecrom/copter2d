@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.WorldAsset;
 import com.copter.utils.BodyEditorLoader;
+import com.copter.utils.Box2dUtils;
 
 public abstract class Bonus implements WorldAsset{
   private static final float DENSITY = 100;
@@ -50,11 +51,7 @@ public abstract class Bonus implements WorldAsset{
   public void init(World world) {
     this.world = world;
     
-    BodyDef bonusBodyDef = new BodyDef();
-    bonusBodyDef.position.set(new Vector2(INIT_X, INIT_Y));
-    bonusBodyDef.type = BodyType.KinematicBody;
-    
-    body = world.createBody(bonusBodyDef);
+    body = Box2dUtils.createBody(world, BodyType.KinematicBody, new Vector2(INIT_X, INIT_Y));
     body.setLinearVelocity(HORIZONTAL_VELOCITY, VERTICAL_VELOCITY);
     
     FixtureDef bonusFixtureDef = new FixtureDef();

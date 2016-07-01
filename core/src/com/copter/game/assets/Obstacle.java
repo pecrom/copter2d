@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
 import com.copter.Copter2D;
+import com.copter.utils.Box2dUtils;
 
 
 public class Obstacle implements WorldAsset {
@@ -59,18 +60,11 @@ public class Obstacle implements WorldAsset {
 
   @Override
   public void init(World world) {
-    BodyDef bodyDefObstacle = new BodyDef();
-    bodyDefObstacle.type = BodyType.KinematicBody;
-    bodyDefObstacle.position.set(INITIAL_POSITION_X, INITIAL_POSITION_Y);
     
-    bodyObstacle = world.createBody(bodyDefObstacle);
+    bodyObstacle = Box2dUtils.createBody(world, BodyType.KinematicBody, INITIAL_POSITION_X, INITIAL_POSITION_Y);
     
     Shape shapeObstacle = Obstacle.createShape();    
-   
-    FixtureDef fixtureDefObstacle = new FixtureDef();
-    fixtureDefObstacle.density = OBSTACLE_DENSITY;
-    fixtureDefObstacle.friction = OBSTACLE_FRICTION;
-    fixtureDefObstacle.shape = shapeObstacle;
+    FixtureDef fixtureDefObstacle = new FixtureDef(); Box2dUtils.createFixtureDef(OBSTACLE_DENSITY, OBSTACLE_FRICTION, shapeObstacle);
     
     bodyObstacle.createFixture(fixtureDefObstacle).setUserData(this);
 

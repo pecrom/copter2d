@@ -12,6 +12,7 @@ import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.Updatable;
 import com.copter.game.assets.WorldAsset;
 import com.copter.utils.BodyEditorLoader;
+import com.copter.utils.Box2dUtils;
 
 public abstract class Meteorit implements WorldAsset, Updatable{
   private static final float DENSITY = 100f;
@@ -57,11 +58,8 @@ public abstract class Meteorit implements WorldAsset, Updatable{
   public void init(World world) {
     this.world = world;
     
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.KinematicBody;
-    bodyDef.position.set(new Vector2(0, 0));
+    body = Box2dUtils.createBody(world, BodyType.KinematicBody, new Vector2(0, 0));
     
-    body = world.createBody(bodyDef);
     
     FixtureDef fixtureDef = new FixtureDef();
     fixtureDef.density = DENSITY;

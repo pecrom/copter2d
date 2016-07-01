@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.utils.BodyEditorLoader;
+import com.copter.utils.Box2dUtils;
 
 public class GameBorder implements Updatable, WorldAsset {
   private static final float DENSITY = 100f;
@@ -53,15 +54,9 @@ public class GameBorder implements Updatable, WorldAsset {
   public void init(World world) {
     this.world = world;
     
-    BodyDef bodyDef = new BodyDef();
-    bodyDef.type = BodyType.StaticBody;
-    bodyDef.position.set(new Vector2(0, 0));
+    body = Box2dUtils.createBody(world, BodyType.StaticBody, new Vector2(0, 0));
     
-    body = world.createBody(bodyDef);
-    
-    FixtureDef fixtureDef = new FixtureDef();
-    fixtureDef.density = DENSITY;
-    fixtureDef.friction = FRICTION;   
+    FixtureDef fixtureDef = Box2dUtils.createFixtureDef(DENSITY, FRICTION, null);  
     
     BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
     loader.attachFixture(body, fixtureName, fixtureDef, Copter2D.GAME_WIDTH, this);
