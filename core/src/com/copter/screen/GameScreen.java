@@ -22,11 +22,10 @@ import com.copter.managers.BonusManager;
 import com.copter.managers.BorderManager;
 import com.copter.managers.MeteoritManager;
 import com.copter.managers.ObstacleManager;
+import com.copter.utils.Box2dUtils;
 
 public class GameScreen extends ScreenAdapter {
-  private static final float   GRAVITY          = -0.3f;             // TODO change
-                                                                  // back to
-                                                                  // -0.3f
+  private static final float   GRAVITY          = -0.3f;             
   private static final float   HORIZONTAL_FORCE = 0.0F;
   private static final boolean DO_DEBUG         = true;
 
@@ -43,70 +42,70 @@ public class GameScreen extends ScreenAdapter {
   private MeteoritManager      meteorits;
   private BonusManager         bonuses;
 
+  
+  /**
+   * Creates main game screen.
+   */
   public GameScreen() {
     fpsLogger = new FPSLogger();
     initWorld();
+    initCamera();
+    initPlane();
+    initObstacle();
+    initManagers();
+    Gdx.input.setInputProcessor(new GameInput(gameWorld, plane, gameCamera));    
+    
     if (DO_DEBUG) {
       debugRenderer = new Box2DDebugRenderer();
-    }
-    
+    }    
   }
 
-  private void initWorld() {
-    gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);
-    CollisionsChecker checker = new CollisionsChecker();
-    gameWorld.setContactFilter(checker);
-    gameWorld.setContactListener(checker);
-
-    gameCamera = new OrthographicCamera(Copter2D.WIDTH / Copter2D.SCALE, Copter2D.HEIGHT / Copter2D.SCALE);
-    gameCamera.position.set(Copter2D.WIDTH / Copter2D.SCALE / 2, Copter2D.HEIGHT / Copter2D.SCALE / 2, 0);
-
-    plane = Airplane.getInstance();
-    plane.init(gameWorld);
-
+  private void initManagers() {
     obstacles = ObstacleManager.getInstance(gameWorld, plane);
     borders = BorderManager.getInstance(gameWorld);
     meteorits = MeteoritManager.getInstance(gameWorld);
     bonuses = BonusManager.getInstance(gameWorld, plane);
-
-    initObstacle();
+  }
+  
+  private void initCamera() {
+    gameCamera = new OrthographicCamera(Copter2D.WIDTH / Copter2D.SCALE, Copter2D.HEIGHT / Copter2D.SCALE);
+    gameCamera.position.set(Copter2D.WIDTH / Copter2D.SCALE / 2, Copter2D.HEIGHT / Copter2D.SCALE / 2, 0);
+  }
+  
+  private void initPlane() {
+    plane = Airplane.getInstance();
+    plane.init(gameWorld);
+  }
+  
+  /**
+   * Initialise world with collision checker.
+   */
+  private void initWorld() {
+    CollisionsChecker checker = new CollisionsChecker();   
     
-    Gdx.input.setInputProcessor(new GameInput(gameWorld, plane, gameCamera));
+    gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);    
+    gameWorld.setContactFilter(checker);
+    gameWorld.setContactListener(checker);            
   }
 
   private void initObstacle() {
     // TOP
-    BodyDef obstacleTopDef = new BodyDef();
-    obstacleTopDef.type = BodyType.StaticBody;
-    obstacleTopDef.position.set(new Vector2(-5, 3));
-
-    obstacleTop = gameWorld.createBody(obstacleTopDef);
+    obstacleTop = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 3));    
 
     PolygonShape obstacleTopShape = new PolygonShape();
     obstacleTopShape.set(new float[] { 0, 0, 1, 0, 0.5f, -2.39f });
 
-    FixtureDef obstacleTopFix = new FixtureDef();
-    obstacleTopFix.density = 1000;
-    obstacleTopFix.friction = 1;
-    obstacleTopFix.shape = obstacleTopShape;
+    FixtureDef obstacleTopFix = Box2dUtils.createFixtureDef(1000, 1, obstacleTopShape);
 
     obstacleTop.createFixture(obstacleTopFix);
 
-    // BOTTOM
-    BodyDef obstacleBottomDef = new BodyDef();
-    obstacleBottomDef.type = BodyType.StaticBody;
-    obstacleBottomDef.position.set(new Vector2(-5, 0));
-
-    obstacleBottom = gameWorld.createBody(obstacleBottomDef);
-
+    // BOTTOM    
+    obstacleBottom = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 0));     
+    
     PolygonShape obstacleBottomShape = new PolygonShape();
     obstacleBottomShape.set(new float[] { 0, 0, 1, 0, 0.5f, 2.39f });
 
-    FixtureDef obstacleBottomFix = new FixtureDef();
-    obstacleBottomFix.density = 1000;
-    obstacleBottomFix.friction = 0;
-    obstacleBottomFix.shape = obstacleBottomShape;
-
+    FixtureDef obstacleBottomFix = Box2dUtils.createFixtureDef(1000, 1, obstacleBottomShape);
     obstacleBottom.createFixture(obstacleBottomFix);
 
   }
@@ -114,7 +113,7 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     updateWorld(delta);
-    GameScreen.updateGraphics();
+    updateGraphics();
     fpsLogger.log();
 
     gameCamera.position.x = plane.getBody().getPosition().x + 3;
@@ -137,9 +136,10 @@ public class GameScreen extends ScreenAdapter {
 
   }
 
-  private static void updateGraphics() {
+  private void updateGraphics() {
+    //clearing screen   
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
   }
-
+  
 }
