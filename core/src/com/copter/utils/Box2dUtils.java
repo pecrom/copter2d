@@ -1,5 +1,6 @@
 package com.copter.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -52,5 +53,33 @@ public class Box2dUtils {
     
     return fixtureDef;    
   }
+  
+  /**
+   * Creates fixture definition according to provided parameters.
+   * @param density density of the fixture
+   * @param friction friction of the fixture
+   * @param isSensor sets if the fixture is sensor
+   * @return
+   */
+  public static FixtureDef createFixtureDef(float density, float friction, boolean isSensor) {
+    FixtureDef fixtureDef = createFixtureDef(density, friction, null);
+    fixtureDef.isSensor = isSensor;
+    return  fixtureDef;
+  }
+  
+  /**
+   * Attaches fixture to body.
+   * @param fixtureData data which represents fixture itself
+   * @param body body of the fixture
+   * @param fixtureName name of the fixture, must be in fixtureData
+   * @param fixtureDef definition of the fixture
+   * @param width width of the fixture
+   * @param userData user data
+   */
+  public static void attachFixture(String fixtureData, Body body, String fixtureName, FixtureDef fixtureDef, float width, Object userData){
+    BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
+    loader.attachFixture(body, fixtureName, fixtureDef, width, userData);
+  }
 
+  
 }

@@ -1,22 +1,19 @@
 package com.copter.game.assets.bonus;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.WorldAsset;
-import com.copter.utils.BodyEditorLoader;
 import com.copter.utils.Box2dUtils;
 
 public abstract class Bonus implements WorldAsset{
   private static final float DENSITY = 100;
   private static final float FRICTION = 1;
-  private static final float INIT_X = -10;
+  private static final float INIT_X  = -10;
   private static final float INIT_Y = -10;
   private static final float SCALE = 0.3f;
   private static final float NO_ROTATION = 0;
@@ -54,13 +51,9 @@ public abstract class Bonus implements WorldAsset{
     body = Box2dUtils.createBody(world, BodyType.KinematicBody, new Vector2(INIT_X, INIT_Y));
     body.setLinearVelocity(HORIZONTAL_VELOCITY, VERTICAL_VELOCITY);
     
-    FixtureDef bonusFixtureDef = new FixtureDef();
-    bonusFixtureDef.density = DENSITY; 
-    bonusFixtureDef.friction = FRICTION;
-    bonusFixtureDef.isSensor = true;
-    BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, bonusFixtureDef, SCALE, this);
-    
+    FixtureDef bonusFixtureDef = Box2dUtils.createFixtureDef(DENSITY, FRICTION, true);
+        
+    Box2dUtils.attachFixture(fixtureData, body, fixtureName, bonusFixtureDef, SCALE, this);    
   }
 
   @Override

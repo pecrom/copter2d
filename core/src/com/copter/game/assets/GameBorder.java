@@ -1,15 +1,12 @@
 package com.copter.game.assets;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
-import com.copter.utils.BodyEditorLoader;
 import com.copter.utils.Box2dUtils;
 
 public class GameBorder implements Updatable, WorldAsset {
@@ -58,8 +55,7 @@ public class GameBorder implements Updatable, WorldAsset {
     
     FixtureDef fixtureDef = Box2dUtils.createFixtureDef(DENSITY, FRICTION, null);  
     
-    BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, fixtureDef, Copter2D.GAME_WIDTH, this);
+    Box2dUtils.attachFixture(fixtureData, body, fixtureName, fixtureDef, Copter2D.GAME_WIDTH, this);    
     
     //body.createFixture(fixtureDef); //TODO set texture
   } 

@@ -7,7 +7,7 @@ public class SpeedBonus extends Bonus{
   /**
    * Decrease of the speed
    */
-  private static final float SPEED_DECREASE = 0.5f;
+  private static final float SPEED_DECREASE = 0.05f;
   
   private static final String FIXTURE_DATA = "fixtures/bonusSpeed"; 
   private static final String FIXTURE_NAME = "speedBonus";

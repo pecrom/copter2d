@@ -1,17 +1,14 @@
 package com.copter.game.assets.meteorits;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.Updatable;
 import com.copter.game.assets.WorldAsset;
-import com.copter.utils.BodyEditorLoader;
 import com.copter.utils.Box2dUtils;
 
 public abstract class Meteorit implements WorldAsset, Updatable{
@@ -61,15 +58,14 @@ public abstract class Meteorit implements WorldAsset, Updatable{
     body = Box2dUtils.createBody(world, BodyType.KinematicBody, new Vector2(0, 0));
     
     
-    FixtureDef fixtureDef = new FixtureDef();
-    fixtureDef.density = DENSITY;
-    fixtureDef.friction = FRICTION;   
-    fixtureDef.isSensor = true;
+    FixtureDef fixtureDef = Box2dUtils.createFixtureDef(DENSITY, FRICTION, true);
+    
     body.setActive(true);
     body.setLinearVelocity(new Vector2(speed, VERTICAL_VELOCITY));
     
-    BodyEditorLoader loader = new BodyEditorLoader(Gdx.files.internal(fixtureData));
-    loader.attachFixture(body, fixtureName, fixtureDef, width, this);    
+    Box2dUtils.attachFixture(fixtureData, body, fixtureName, fixtureDef, width, this);
+    
+    
     
   //body.createFixture(fixtureDef); //TODO set texture
   }
