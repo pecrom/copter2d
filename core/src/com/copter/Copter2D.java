@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.copter.game.state.StateManager;
-import com.copter.screen.GameScreen;
 
 public class Copter2D extends Game {
   public static final float WIDTH       = 800;

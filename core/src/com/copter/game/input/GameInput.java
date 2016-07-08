@@ -39,6 +39,14 @@ public class GameInput implements InputProcessor {
 
   @Override
   public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+    if (plane.getFuel() > 0) { //plane still has some fuel
+      controlPlane(screenX, screenY);
+    }
+    
+    return true;
+  }
+
+  private void controlPlane(int screenX, int screenY) {
     Vector2 boxCenterPosition = new Vector2(plane.getBody().getPosition().x, plane.getBody().getPosition().y);
     Vector3 touchPosition = camera.unproject(new Vector3(screenX, screenY, 0));
     Vector2 distanceVec = new Vector2(boxCenterPosition);
@@ -54,9 +62,8 @@ public class GameInput implements InputProcessor {
       plane.getBody().applyLinearImpulse(new Vector2(0, forceToApply), plane.getBody().getPosition(), true);
     }
 
-    return true;
   }
-
+  
   @Override
   public boolean touchUp(int screenX, int screenY, int pointer, int button) {
     return false;

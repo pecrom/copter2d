@@ -62,8 +62,12 @@ public final class Airplane implements WorldAsset, Updatable {
   /**
    * Fuel consumption per meter
    */
-  private static final float FULE_CONSUMPTION_PER_METER = 15f;
+  private static final float FUEL_CONSUMPTION_PER_METER = 15f;
   
+  /**
+   * For how long the shield should be active
+   */
+  private static final float MAX_DURATION_OF_SHIELD = 5f;
   
   private float horizontalVelocity = INIT_HORIZONTAL_VELOCITY;
   
@@ -73,6 +77,10 @@ public final class Airplane implements WorldAsset, Updatable {
    * % of fuel
    */
   private float fuel = 100f;
+  
+  private boolean shielded = false;
+  private float shieldDuration = 0f;
+  
   
   private static Airplane instance = null;
   private GameWorldType type = null;
@@ -110,14 +118,26 @@ public final class Airplane implements WorldAsset, Updatable {
   @Override
   public void update(float delta) {
     updateHorizontalVelocity(delta);
+    updateShield(delta);    
   }
 
+  private void updateShield(float delta) {
+    if (hasShield()) {
+      shieldDuration -= delta;
+      if (shieldDuration < 0) { //shield is not active anymore 
+        setShield(false);
+        LOGGER.info("Shield was turned off");
+      }
+    }
+    
+  }
+  
   private void updateHorizontalVelocity(float delta) {
     float deltaDistance = velocity.x * delta;
     nextVelocityUpdate -= deltaDistance;
     distance += deltaDistance;    
-    fuel -= deltaDistance * FULE_CONSUMPTION_PER_METER;
-    
+    fuel -= deltaDistance * FUEL_CONSUMPTION_PER_METER; //@TODO create method for updating fuel state
+    LOGGER.info("Fuel: " + fuel);
     
     if (nextVelocityUpdate < REMAINING_DISTANCE_TO_UPDATE) {
       //update the speed
@@ -137,7 +157,7 @@ public final class Airplane implements WorldAsset, Updatable {
     
     FixtureDef planeFixDef = Box2dUtils.createFixtureDef(PLANE_DENSITY, PLANE_FRICTION, planeShape);
     
-    //@TODO set user data to fixture
+    
     Fixture planeFix = planeBody.createFixture(planeFixDef);
     planeFix.setUserData(this);
     
@@ -213,5 +233,22 @@ public final class Airplane implements WorldAsset, Updatable {
     return horizontalVelocity;
   }
   
+  /**
+   * Returns if the shield is active.
+   * @return boolean status of the shield
+   */
+  public boolean hasShield() {
+    return shielded;
+  }
   
+  /**
+   * Activate or deactivate shield.
+   * @param shield boolean status of the shield
+   */
+  public void setShield(boolean shield) {
+    if (shield) {
+      shieldDuration = MAX_DURATION_OF_SHIELD;
+    }
+    shielded = shield;
+  }
 }
