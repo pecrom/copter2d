@@ -1,0 +1,61 @@
+
+copter2d.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+ceilingGrass
+  rotate: false
+  xy: 1, 142
+  size: 808, 71
+  orig: 808, 71
+  offset: 0, 0
+  index: -1
+groundGrass
+  rotate: false
+  xy: 1, 69
+  size: 808, 71
+  orig: 808, 71
+  offset: 0, 0
+  index: -1
+meteorBrownBig
+  rotate: false
+  xy: 811, 170
+  size: 43, 43
+  orig: 43, 43
+  offset: 0, 0
+  index: -1
+bonusFuel
+  rotate: false
+  xy: 1, 29
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+bonusShield
+  rotate: false
+  xy: 811, 130
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+bonusSpeed
+  rotate: false
+  xy: 856, 175
+  size: 39, 38
+  orig: 39, 38
+  offset: 0, 0
+  index: -1
+meteorBrownMed
+  rotate: false
+  xy: 1, 1
+  size: 29, 26
+  orig: 29, 26
+  offset: 0, 0
+  index: -1
+meteorBrownSmall
+  rotate: false
+  xy: 42, 49
+  size: 18, 18
+  orig: 18, 18
+  offset: 0, 0
+  index: -1
