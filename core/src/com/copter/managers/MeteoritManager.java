@@ -3,6 +3,7 @@ package com.copter.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
@@ -13,10 +14,11 @@ import com.copter.game.assets.meteorits.BigMeteorit;
 import com.copter.game.assets.meteorits.MediumMeteorit;
 import com.copter.game.assets.meteorits.Meteorit;
 import com.copter.game.assets.meteorits.SmallMeteorit;
+import com.copter.game.graphics.GraphicsUpdatable;
 import com.copter.utils.Utils;
 
-public class MeteoritManager implements Updatable{
-  private static final String    LOGGER_TAG          = "MeteoritManager";
+public class MeteoritManager implements Updatable, GraphicsUpdatable{
+  private static final String    LOGGER_TAG          = MeteoritManager.class.getName();
   private static final Logger    LOGGER              = new Logger(LOGGER_TAG, Logger.INFO);
   private static final float HALF_OF_WIDTH = 2;
   
@@ -72,9 +74,11 @@ public class MeteoritManager implements Updatable{
       if ((leftBorder - shownRightBorder) > OVER_VIEWABLE_AREA) {
         shownMeteorit = null;
         timeSinceLastDisappear = 0;
-      }       
-    }    
+      } 
+    } 
   }
+  
+  
   
   private static Vector2 getPositionCoordinates(Meteorit meteoritToShow) {
     float yCoordinate = (float) (Math.random() * Copter2D.GAME_HEIGHT);
@@ -86,6 +90,18 @@ public class MeteoritManager implements Updatable{
   
   private Meteorit chooseMeteorit() {    
     int index = (int) (Math.random() * meteorits.size());
-    return meteorits.get(index);
+    return meteorits.get(index); //index
+  }
+
+  @Override
+  public void updateGraphics(float delta, SpriteBatch batch) {
+   if (shownMeteorit != null) {
+     //LOGGER.info("Meteorit position: " + shownMeteorit.getBody().getPosition().x + " " + shownMeteorit.getBody().getPosition().x * Copter2D.SCALE);
+     //batch.draw(shownMeteorit.getTextureRegion(), (shownMeteorit.getBody().getPosition().x - (Airplane.getInstance().getDistance() - Airplane.PLANE_LEFT_MARGIN)) * Copter2D.SCALE, shownMeteorit.getBody().getPosition().y * Copter2D.SCALE);
+     batch.draw(shownMeteorit.getTextureRegion(),
+         (shownMeteorit.getBody().getPosition().x - (Airplane.getInstance().getDistance() - Airplane.PLANE_LEFT_MARGIN) - shownMeteorit.getWidth() / 2) * Copter2D.SCALE, (shownMeteorit.getBody().getPosition().y - shownMeteorit.getHeight() / 2) * Copter2D.SCALE, shownMeteorit.getTextureRegion().getRegionWidth() / 2, shownMeteorit.getTextureRegion().getRegionHeight() / 2, shownMeteorit.getTextureRegion().getRegionHeight(), shownMeteorit.getTextureRegion().getRegionHeight(),
+         1.1f, 1.1f, (float)Math.toDegrees(shownMeteorit.getRotation()));
+     LOGGER.info("Rotation: " + shownMeteorit.getRotation());
+   }
   }
 }

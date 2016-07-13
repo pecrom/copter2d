@@ -1,6 +1,6 @@
 package com.copter.game.assets;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -53,7 +53,7 @@ public class Obstacle implements WorldAsset {
   }
 
   @Override
-  public Texture getTexture() {
+  public TextureRegion getTextureRegion() {
     throw new UnsupportedOperationException();   
   }
 

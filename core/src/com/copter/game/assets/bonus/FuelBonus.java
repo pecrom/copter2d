@@ -10,9 +10,10 @@ public class FuelBonus extends Bonus{
   
   private static final String FIXTURE_DATA = "fixtures/bonusFuel"; 
   private static final String FIXTURE_NAME = "fuelBonus";
+  private static final String TEXTURE_REGION_NAME = "bonusFuel";
   
   public FuelBonus() {
-    super(FIXTURE_DATA, FIXTURE_NAME);    
+    super(FIXTURE_DATA, FIXTURE_NAME, TEXTURE_REGION_NAME);    
   }
 
   @Override

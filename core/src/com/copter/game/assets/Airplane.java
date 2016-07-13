@@ -1,6 +1,6 @@
 package com.copter.game.assets;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -16,7 +16,7 @@ import com.copter.utils.Box2dUtils;
 
 
 public final class Airplane implements WorldAsset, Updatable {   
-  private static final String LOGGER_TAG = "Airplane";
+  private static final String LOGGER_TAG = Airplane.class.getName();
   
   private static final Logger LOGGER = new Logger(LOGGER_TAG, Logger.INFO);
   
@@ -50,14 +50,14 @@ public final class Airplane implements WorldAsset, Updatable {
    */
   private static final float UPDATE_VELOCITY_EVERY = 10f; //meters
   
-  private static final float HORIZONTAL_VELOCITY_GROWTH = 0.1f;
+  private static final float HORIZONTAL_VELOCITY_GROWTH = 0.0f;//0.1f
   
-  private static final float INIT_HORIZONTAL_VELOCITY = 0.2f;
+  private static final float INIT_HORIZONTAL_VELOCITY = 0.0f; //0.2f
   
   /**
    * Max % of fuel
    */
-  private static final float MAX_FUEL = 100f;
+  private static final float MAX_FUEL = 10000f;
   
   /**
    * Fuel consumption per meter
@@ -111,7 +111,7 @@ public final class Airplane implements WorldAsset, Updatable {
   }
 
   @Override
-  public Texture getTexture() {
+  public TextureRegion getTextureRegion() {
     throw new UnsupportedOperationException();
   }
 
@@ -137,7 +137,6 @@ public final class Airplane implements WorldAsset, Updatable {
     nextVelocityUpdate -= deltaDistance;
     distance += deltaDistance;    
     fuel -= deltaDistance * FUEL_CONSUMPTION_PER_METER; //@TODO create method for updating fuel state
-    LOGGER.info("Fuel: " + fuel);
     
     if (nextVelocityUpdate < REMAINING_DISTANCE_TO_UPDATE) {
       //update the speed

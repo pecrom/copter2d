@@ -3,6 +3,7 @@ package com.copter.managers;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Logger;
 import com.copter.Copter2D;
@@ -12,9 +13,10 @@ import com.copter.game.assets.bonus.Bonus;
 import com.copter.game.assets.bonus.FuelBonus;
 import com.copter.game.assets.bonus.ShieldBonus;
 import com.copter.game.assets.bonus.SpeedBonus;
+import com.copter.game.graphics.GraphicsUpdatable;
 import com.copter.utils.Utils;
 
-public class BonusManager implements Updatable {
+public class BonusManager implements Updatable, GraphicsUpdatable {
   private static final String LOGGER_TAG        = "BonusManager";
 
   private static final Logger LOGGER            = new Logger(LOGGER_TAG, Logger.INFO);
@@ -106,6 +108,18 @@ public class BonusManager implements Updatable {
     int randomIndex = Utils.getRandomValue(bonuses.size());
     randomIndex = randomIndex == bonuses.size() ? bonuses.size() - 1 : randomIndex; //to prevent IndexOutOfBoundsException, if randomIndex is same like bonuses size, then substract one
     return bonuses.get(randomIndex);
+  }
+
+  @Override
+  public void updateGraphics(float delta, SpriteBatch batch) {
+    if (shownBonus != null) {
+      //batch.draw(shownBonus.getTextureRegion(), (shownBonus.getBody().getPosition().x)* Copter2D.SCALE, shownBonus.getBody().getPosition().y * Copter2D.SCALE);
+      batch.draw(shownBonus.getTextureRegion(),
+          (shownBonus.getBody().getPosition().x - (Airplane.getInstance().getDistance() - Airplane.PLANE_LEFT_MARGIN))* Copter2D.SCALE, shownBonus.getBody().getPosition().y * Copter2D.SCALE, 0, 0, shownBonus.getTextureRegion().getRegionHeight(), shownBonus.getTextureRegion().getRegionHeight(),
+          0.8f, 0.8f, 0);
+    }
+    
+    
   }
 
 }

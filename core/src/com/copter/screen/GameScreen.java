@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -24,14 +25,13 @@ import com.copter.managers.ObstacleManager;
 import com.copter.utils.Box2dUtils;
 
 public class GameScreen extends ScreenAdapter {
-  private static final float   GRAVITY          = -0.3f;             
+  private static final float   GRAVITY          = -0.3f;
   private static final float   HORIZONTAL_FORCE = 0.0F;
   private static final boolean DO_DEBUG         = true;
 
   private World                gameWorld;
   private Camera               gameCamera;
   private Box2DDebugRenderer   debugRenderer;
-  private Body                 boxBody;
   private Body                 obstacleTop, obstacleBottom, bonus;
   private FPSLogger            fpsLogger;
 
@@ -40,8 +40,8 @@ public class GameScreen extends ScreenAdapter {
   private BorderManager        borders;
   private MeteoritManager      meteorits;
   private BonusManager         bonuses;
+  private SpriteBatch          batch;
 
-  
   /**
    * Creates main game screen.
    */
@@ -52,11 +52,13 @@ public class GameScreen extends ScreenAdapter {
     initPlane();
     initObstacle();
     initManagers();
-    Gdx.input.setInputProcessor(new GameInput(gameWorld, plane, gameCamera));    
-    
+    Gdx.input.setInputProcessor(new GameInput(gameWorld, plane, gameCamera));
+
     if (DO_DEBUG) {
       debugRenderer = new Box2DDebugRenderer();
-    }    
+    }
+    
+    batch = new SpriteBatch();
   }
 
   private void initManagers() {
@@ -65,31 +67,31 @@ public class GameScreen extends ScreenAdapter {
     meteorits = MeteoritManager.getInstance(gameWorld);
     bonuses = BonusManager.getInstance(gameWorld, plane);
   }
-  
+
   private void initCamera() {
     gameCamera = new OrthographicCamera(Copter2D.WIDTH / Copter2D.SCALE, Copter2D.HEIGHT / Copter2D.SCALE);
     gameCamera.position.set(Copter2D.WIDTH / Copter2D.SCALE / 2, Copter2D.HEIGHT / Copter2D.SCALE / 2, 0);
   }
-  
+
   private void initPlane() {
     plane = Airplane.getInstance();
     plane.init(gameWorld);
   }
-  
+
   /**
    * Initialise world with collision checker.
    */
   private void initWorld() {
-    CollisionsChecker checker = new CollisionsChecker();   
-    
-    gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);    
+    CollisionsChecker checker = new CollisionsChecker();
+
+    gameWorld = new World(new Vector2(HORIZONTAL_FORCE, GRAVITY), true);
     gameWorld.setContactFilter(checker);
-    gameWorld.setContactListener(checker);            
+    gameWorld.setContactListener(checker);
   }
 
   private void initObstacle() {
     // TOP
-    obstacleTop = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 3));    
+    obstacleTop = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 3));
 
     PolygonShape obstacleTopShape = new PolygonShape();
     obstacleTopShape.set(new float[] { 0, 0, 1, 0, 0.5f, -2.39f });
@@ -98,9 +100,9 @@ public class GameScreen extends ScreenAdapter {
 
     obstacleTop.createFixture(obstacleTopFix);
 
-    // BOTTOM    
-    obstacleBottom = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 0));     
-    
+    // BOTTOM
+    obstacleBottom = Box2dUtils.createBody(gameWorld, BodyType.StaticBody, new Vector2(-5, 0));
+
     PolygonShape obstacleBottomShape = new PolygonShape();
     obstacleBottomShape.set(new float[] { 0, 0, 1, 0, 0.5f, 2.39f });
 
@@ -112,8 +114,8 @@ public class GameScreen extends ScreenAdapter {
   @Override
   public void render(float delta) {
     updateWorld(delta);
-    updateGraphics();
-    fpsLogger.log();
+    updateGraphics(delta);
+   // fpsLogger.log();
 
     gameCamera.position.x = plane.getBody().getPosition().x + 3;
 
@@ -135,10 +137,16 @@ public class GameScreen extends ScreenAdapter {
 
   }
 
-  private void updateGraphics() {
-    //clearing screen   
+  private void updateGraphics(float delta) {
+    // clearing screen
     Gdx.gl.glClearColor(0, 0, 0, 1);
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+    batch.begin();
+    meteorits.updateGraphics(delta, batch);
+    bonuses.updateGraphics(delta, batch);
+    batch.end();
+    
+    
   }
-  
+
 }

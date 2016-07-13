@@ -3,13 +3,15 @@ package com.copter.managers;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.copter.Copter2D;
 import com.copter.game.assets.Airplane;
 import com.copter.game.assets.GameBorder;
 import com.copter.game.assets.Updatable;
+import com.copter.game.graphics.GraphicsUpdatable;
 
-public class BorderManager implements Updatable {  
+public class BorderManager implements Updatable, GraphicsUpdatable {  
   private static final String    BOTTOM_FIXTURE_DATA = "fixtures/bottomBorder";
   private static final String    BOTTOM_FIXTURE_NAME = "bottomBorder";
   private static final String    TOP_FIXTURE_DATA    = "fixtures/topBorder";
@@ -69,9 +71,10 @@ public class BorderManager implements Updatable {
   public void update(float delta) {
     topActual = updateBorder(topActual, top);
     bottomActual = updateBorder(bottomActual, bottom);
-
   }
 
+  
+  
   private static GameBorder updateBorder(GameBorder actual, Queue<GameBorder> queue) {
     float xPlane = Airplane.getInstance().getBody().getPosition().x;
     GameBorder updatedBorder = actual;
@@ -83,5 +86,11 @@ public class BorderManager implements Updatable {
       updatedBorder = queue.poll();
     }
     return updatedBorder;
+  }
+
+  @Override
+  public void updateGraphics(float delta, SpriteBatch batch) {
+    // TODO Auto-generated method stub
+    
   }
 }

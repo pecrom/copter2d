@@ -1,6 +1,6 @@
 package com.copter.game.assets.meteorits;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -10,8 +10,9 @@ import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.Updatable;
 import com.copter.game.assets.WorldAsset;
 import com.copter.utils.Box2dUtils;
+import com.copter.utils.TextureProvider;
 
-public abstract class Meteorit implements WorldAsset, Updatable{
+public abstract class Meteorit implements WorldAsset, Updatable {
   private static final float DENSITY = 100f;
   private static final float FRICTION = 1f;
   private static final float VERTICAL_VELOCITY = 0f;
@@ -31,25 +32,31 @@ public abstract class Meteorit implements WorldAsset, Updatable{
   protected World world;
   protected Body body;
   
+  private String textureName;
   /**
    * Instatiate new meteorit based on provided fixture and its name.
+   * @param textureName TODO
    */
-  public Meteorit(String fixtureData, String fixtureName, float speed) {
+  public Meteorit(String fixtureData, String fixtureName, String textureName, float speed) {
     this.fixtureData = fixtureData;
     this.fixtureName = fixtureName;
+    this.textureName = textureName;
     this.speed = speed;    
   }
   
+  
+  
+  @Override
+  public TextureRegion getTextureRegion() {
+    return TextureProvider.getInstance().getTextureRegion(textureName);
+  }
+
+
+
   @Override
   public GameWorldType getWorldType() {
     return GameWorldType.OBSTACLE;
-  }
-
-  @Override
-  public Texture getTexture() {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  }  
 
   @Override
   public void init(World world) {
@@ -96,6 +103,8 @@ public abstract class Meteorit implements WorldAsset, Updatable{
     body.setTransform(body.getPosition(), rotation);
   }
   
-  
+  public float getRotation() {
+    return rotation;
+  }
   
 }

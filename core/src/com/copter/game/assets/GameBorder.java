@@ -1,6 +1,6 @@
 package com.copter.game.assets;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -12,6 +12,7 @@ import com.copter.utils.Box2dUtils;
 public class GameBorder implements Updatable, WorldAsset {
   private static final float DENSITY = 100f;
   private static final float FRICTION = 1f;
+  //private static final String TEXTURE_REGION_NAME = 
   private Body body;
   private String fixtureData, fixtureName;
   private World world;
@@ -42,7 +43,7 @@ public class GameBorder implements Updatable, WorldAsset {
   }
 
   @Override
-  public Texture getTexture() {
+  public TextureRegion getTextureRegion() {
     // TODO return texture
     return null;
   }

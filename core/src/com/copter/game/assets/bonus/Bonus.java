@@ -1,6 +1,6 @@
 package com.copter.game.assets.bonus;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.copter.game.assets.GameWorldType;
 import com.copter.game.assets.WorldAsset;
 import com.copter.utils.Box2dUtils;
+import com.copter.utils.TextureProvider;
 
 public abstract class Bonus implements WorldAsset{
   private static final float DENSITY = 100;
@@ -26,9 +27,12 @@ public abstract class Bonus implements WorldAsset{
   protected String fixtureName;
   protected boolean consumed;
   
-  protected Bonus(String fixtureData, String fixtureName) {
+  private String textureRegionName;
+  
+  protected Bonus(String fixtureData, String fixtureName, String textureRegionName) {
     this.fixtureData = fixtureData;
     this.fixtureName = fixtureName;
+    this.textureRegionName = textureRegionName;
     consumed = false;
   }
   
@@ -39,9 +43,8 @@ public abstract class Bonus implements WorldAsset{
   }
 
   @Override
-  public Texture getTexture() {
-    // TODO Auto-generated method stub
-    return null;
+  public TextureRegion getTextureRegion() {
+    return TextureProvider.getInstance().getTextureRegion(textureRegionName);
   }
 
   @Override

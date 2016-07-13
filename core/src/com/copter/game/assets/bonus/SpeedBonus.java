@@ -11,11 +11,11 @@ public class SpeedBonus extends Bonus{
   
   private static final String FIXTURE_DATA = "fixtures/bonusSpeed"; 
   private static final String FIXTURE_NAME = "speedBonus";
-  
+  private static final String TEXTURE_REGION_NAME = "bonusSpeed";
   
   
   public SpeedBonus() {
-    super(FIXTURE_DATA, FIXTURE_NAME);    
+    super(FIXTURE_DATA, FIXTURE_NAME, TEXTURE_REGION_NAME);    
   }
 
   @Override
