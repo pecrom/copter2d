@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Logger;
 
 /**
@@ -22,17 +23,17 @@ public class TextureProvider {
 
   private static TextureProvider instance;
 
-  private static final String  PACK_FILE_NAME  = "copter2d";
+  private static final String  PACK_FILE_NAME  = "atlases/copter2d.atlas";
 
   private static final String  IMAGES_DIR_NAME = "images/atlas/";
 
   private TextureAtlas         atlas;
 
-  private Map<String, Texture> texturesCache;
+  private Map<String, TextureRegion> texturesCache;
 
   private TextureProvider() {
     atlas = new TextureAtlas(Gdx.files.internal(PACK_FILE_NAME), Gdx.files.internal(IMAGES_DIR_NAME));
-    texturesCache = new HashMap<String, Texture>();
+    texturesCache = new HashMap<String, TextureRegion>();
   }
 
   /**
@@ -50,18 +51,18 @@ public class TextureProvider {
 
   
   /**
-   * Returns texture from the texture pack according to texture name. 
-   * @param name of the texture
-   * @return found texture
+   * Returns texture region from the texture pack according to texture region name. 
+   * @param name of the texture region
+   * @return found texture region
    */
-  public Texture getTexture(String name) {
-    Texture found = texturesCache.get(name);
+  public TextureRegion getTextureRegion(String name) {
+    TextureRegion found = texturesCache.get(name);
 
     if (found == null) {
-      AtlasRegion region = atlas.findRegion(name);
+      TextureRegion region = atlas.findRegion(name);
 
       if (region != null) {
-        found = region.getTexture();
+        found = region;
         texturesCache.put(name, found);
       } else {
         LOGGER.error("Texture with name " + name + " was not found in texture pack " + PACK_FILE_NAME);
